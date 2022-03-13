@@ -1,0 +1,58 @@
+= How to use the examples in this repo
+
+== Batch processing
+
+The default processor config is set to batch:
+
+```
+processors:
+  batch:
+  spanmetrics:
+    metrics_exporter: prometheus
+
+service:
+  pipelines:
+    traces:
+      receivers: [jaeger]
+      processors: [spanmetrics, batch]
+```
+
+== Tail-sampling
+
+To enable `tail_sampling`, make sure your _otel-collector-config.yml_ has the following configuration:
+
+```processors:
+  tail_sampling:
+    decision_wait: 10s
+    num_traces: 100
+    expected_new_traces_per_sec: 10
+    policies:
+      [
+        {
+          name: latency-policy,
+          type: latency,
+          latency: { threshold_ms: 5000 }
+        },
+        {
+          name: status-code-policy,
+          type: status_code,
+          status_code: { status_codes: [ ERROR, OK ] }
+        },
+        {
+          name: string-policy,
+          type: string_attribute,
+          string_attribute: { key: alarm, values: [ unexpected ] }
+        }
+      ]
+  spanmetrics:
+    metrics_exporter: prometheus
+
+service:
+  pipelines:
+    traces:
+      receivers: [jaeger]
+      processors: [spanmetrics, tail_sampling]
+```
+
+Also, use `quarkus.opentelemetry.tracer.sampler=on` in Quarkus configuration.
+

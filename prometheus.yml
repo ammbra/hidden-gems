@@ -1,0 +1,19 @@
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+scrape_configs:
+  - job_name: aggregated-trace-metrics
+    static_configs:
+      - targets: ['otel_collector:8889']
+  - job_name: 'activity'
+    metrics_path: '/metrics'
+    scrape_interval: 3s
+    static_configs:
+      - targets: [ 'activity:8082']
+  - job_name: 'hobby'
+    metrics_path: '/metrics'
+    scrape_interval: 3s
+    static_configs:
+      - targets: [ 'hobby:8080' ]

@@ -1,0 +1,18 @@
+{
+  "service_strategies": [
+    {
+      "service": "activity",
+      "type": "probabilistic",
+      "param": 0.8
+    },
+    {
+      "service": "hobby",
+      "type": "ratelimiting",
+      "param": 5
+    }
+  ],
+  "default_strategy": {
+    "type": "constant",
+    "param": 1
+  }
+}
