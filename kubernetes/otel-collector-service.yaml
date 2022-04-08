@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: otel-collector
+  labels:
+    io.kompose.service: otel-collector
+spec:
+  ports:
+    - protocol: TCP
+      port: 8889
+      targetPort: 8889
+  type: ClusterIP
+  selector:
+    io.kompose.service: otel-collector

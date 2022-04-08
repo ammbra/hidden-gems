@@ -28,11 +28,7 @@ public class FrontendResource {
     private final AtomicInteger requestSequence = new AtomicInteger(0);
     private final Data data = new Data();
 
-    @Inject
-    Tracer tracer;
-
     @RestClient
-    @Inject
     BackendService backendService;
 
     @POST
