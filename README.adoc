@@ -56,3 +56,10 @@ service:
 
 Also, use `quarkus.opentelemetry.tracer.sampler=on` in Quarkus configuration.
 
+== Using the trace-debug-id header
+
+If you would like to use the extra attribute for debugging, you can try the following command:
+
+```
+curl -H 'trace-debug-id:local' http://localhost:8082/activity/type/busywork
+```

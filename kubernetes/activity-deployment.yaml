@@ -2,36 +2,67 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f docker-compose.yaml
-    kompose.version: 1.26.0 (40646f47)
-  creationTimestamp: null
+    app.quarkus.io/commit-id: 96059e271637ad9f7215eea1faa75adb4fdab46a
+    app.quarkus.io/build-timestamp: 2022-04-08 - 18:42:00 +0000
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
+    prometheus.io/port: "8080"
+    prometheus.io/scheme: http
   labels:
-    io.kompose.service: activity
+    app.kubernetes.io/version: 2.0.6-native
+    app.kubernetes.io/name: activity
   name: activity
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: activity
-  strategy: {}
+      app.kubernetes.io/version: 2.0.6-native
+      app.kubernetes.io/name: activity
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f docker-compose.yaml
-        kompose.version: 1.26.0 (40646f47)
-      creationTimestamp: null
+        app.quarkus.io/commit-id: 96059e271637ad9f7215eea1faa75adb4fdab46a
+        app.quarkus.io/build-timestamp: 2022-04-08 - 18:42:00 +0000
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+        prometheus.io/scheme: http
       labels:
-        io.kompose.network/backend: "true"
-        io.kompose.service: activity
+        app.kubernetes.io/version: 2.0.6-native
+        app.kubernetes.io/name: activity
     spec:
       containers:
         - args:
-            - -Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces
-            - -Dquarkus.http.port=8082
+          - -Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           image: quay.io/anasandbox/activity:2.0.6-native
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
           name: activity
           ports:
-            - containerPort: 8082
-          resources: {}
-      restartPolicy: Always
-status: {}
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
