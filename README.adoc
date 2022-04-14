@@ -61,5 +61,21 @@ Also, use `quarkus.opentelemetry.tracer.sampler=on` in Quarkus configuration.
 If you would like to use the extra attribute for debugging, you can try the following command:
 
 ```
-curl -H 'trace-debug-id:local' http://localhost:8082/activity/type/busywork
+curl -H 'trace-debug-id:local' http://<url_to_the_service>:8082/activity/type/busywork
+```
+
+== Average over time for a specific status in the last hour
+
+```
+avg_over_time(http_server_requests_seconds_max{job="activity", method="GET", status="504"}[1h:5m])
+```
+
+=== Query for a cache hit rate graph with Prometheus
+
+You can simulate some load using hey:
+
+hey -n 20 -c 10 http://<url_to_the_service>/activity/5881028
+
+```
+sum(delta(cache_gets_total{result="hit",cache="activity"}[1m]))/sum(delta(cache_gets_total{cache="activity"}[1m])) 
 ```
