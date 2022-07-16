@@ -29,28 +29,28 @@ services:
     command: --config /etc/otelcol/otel-collector-config.yml
     depends_on:
       - jaeger
-  activity:
-     networks:
-       - backend
-     image: quay.io/anasandbox/activity:2.0.6-native
-     ports:
-       - "8082:8080"
-     command: ["-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8082"]
-     depends_on:
-         - otel_collector
-         - jaeger
-  hobby:
-     networks:
-       - backend
-     image: quay.io/anasandbox/hobby-frontend:2.0.6-native
-     ports:
-       - "8080:8080"
-     command: [ "-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8080",
-                "-Dorg.acme.entertainment.BackendService/mp-rest/url=http://activity:8082" ]
-     depends_on:
-       - otel_collector
-       - jaeger
-       - activity
+  # activity:
+  #    networks:
+  #      - backend
+  #    image: quay.io/anasandbox/activity:2.0.6-native
+  #    ports:
+  #      - "8082:8080"
+  #    command: ["-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8082"]
+  #    depends_on:
+  #        - otel_collector
+  #        - jaeger
+  # hobby:
+  #    networks:
+  #      - backend
+  #    image: quay.io/anasandbox/hobby-frontend:2.0.6-native
+  #    ports:
+  #      - "8080:8080"
+  #    command: [ "-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8080",
+  #               "-Dorg.acme.entertainment.BackendService/mp-rest/url=http://activity:8082" ]
+  #    depends_on:
+  #      - otel_collector
+  #      - jaeger
+  #      - activity
   prometheus:
     networks:
       - backend
