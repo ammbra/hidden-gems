@@ -15,7 +15,7 @@ spec:
       port: 5775
       protocol: UDP
       targetPort: 5775
-    - name: "14250"
+    - name: http
       port: 14250
       targetPort: 14250
     - name: "14268"
