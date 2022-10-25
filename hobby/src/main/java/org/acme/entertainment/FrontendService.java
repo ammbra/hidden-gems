@@ -3,6 +3,10 @@ package org.acme.entertainment;
 import io.helidon.common.http.MediaType;
 import io.helidon.config.Config;
 import io.helidon.media.jackson.JacksonSupport;
+import io.helidon.tracing.Span;
+import io.helidon.tracing.SpanContext;
+import io.helidon.tracing.Tag;
+import io.helidon.tracing.Tracer;
 import io.helidon.webclient.WebClient;
 import io.helidon.webserver.*;
 
@@ -38,13 +42,29 @@ public class FrontendService implements Service {
 
     @Override
     public void update(Routing.Rules rules) {
-            rules.get("/data", this::getResponse)
-                .post("/send-request", Handler.create(Request.class, this::sendRequest));
+        rules.any(this::workWithHeaders);
+        rules.get("/data", this::getResponse);
+        rules.post("/send-request", Handler.create(Request.class, this::sendRequest));
+    }
+
+    private void workWithHeaders(ServerRequest serverRequest, ServerResponse serverResponse) {
+        if (serverRequest.headers().value("trace-debug-id").isPresent()) {
+            String debugHeader = serverRequest.headers().value("trace-debug-id").get();
+            Tracer tracer = serverRequest.tracer();
+            SpanContext context = serverRequest.spanContext().get();
+            Span.Builder spanBuilder = tracer.spanBuilder(context.traceId()).parent(context)
+                    .kind(Span.Kind.SERVER)
+                    .tag(Tag.create("trace-debug-id", debugHeader));
+            spanBuilder.start().end();
+        }
+        serverRequest.next();
+
     }
 
     /**
      * Return a worldly greeting message.
-     * @param request the server request
+     *
+     * @param request  the server request
      * @param response the server response
      */
     private void getResponse(ServerRequest request, ServerResponse response) {
@@ -52,9 +72,10 @@ public class FrontendService implements Service {
     }
 
     private void sendRequest(ServerRequest serverRequest,
-                                ServerResponse response,
-                                Request request) {
+                             ServerResponse response,
+                             Request request) {
         final String requestId = ID + "/" + requestSequence.incrementAndGet();
+
         RandomHobby hobby = null;
         try {
             hobby = webClient.get()

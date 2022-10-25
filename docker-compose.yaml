@@ -32,7 +32,7 @@ services:
   # activity:
   #    networks:
   #      - backend
-  #    image: quay.io/anasandbox/activity:2.0.6-native
+  #    image: ammbra/activity:2.0.6-native
   #    ports:
   #      - "8082:8080"
   #    command: ["-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8082"]
@@ -42,7 +42,7 @@ services:
   # hobby:
   #    networks:
   #      - backend
-  #    image: quay.io/anasandbox/hobby-frontend:2.0.6-native
+  #    image: ammbra/anasandbox/hobby:2.0.6-native
   #    ports:
   #      - "8080:8080"
   #    command: [ "-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8080",

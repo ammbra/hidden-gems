@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: jaeger
   name: jaeger
 spec:
+  type: LoadBalancer
   ports:
     - name: "5775"
       port: 5775

@@ -3,9 +3,6 @@ apiVersion: apps/v1
 metadata:
   annotations:
     deployment.kubernetes.io/revision: '4'
-    image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name":"prometheus:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"prometheus\")].image"}]
-    openshift.io/generated-by: OpenShiftNewApp
   name: prometheus
   labels:
     app: prometheus

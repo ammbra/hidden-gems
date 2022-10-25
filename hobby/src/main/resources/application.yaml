@@ -6,6 +6,7 @@ backend:
     url: http://localhost:8082
 
 tracing:
+  enabled: true
   service: "hobby"
   protocol: "http"     # JAEGER_ENDPOINT (if not udp, http is expected and endpoint is filled)
   host: "localhost:14250/api/traces"   # JAEGER_ENDPOINT
