@@ -10,6 +10,10 @@ public non-sealed class RandomHobby extends BasicHobby {
     private String workerId;
     private boolean precious;
 
+    public RandomHobby() {
+        super();
+    }
+
     public RandomHobby(String key, String activity, String type, int participants, double price) {
         super(key, activity, type, participants, price);
     }

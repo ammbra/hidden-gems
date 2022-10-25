@@ -11,7 +11,11 @@ public sealed class BasicHobby permits RandomHobby {
     private String activity;
     private String type;
     private int participants;
+
     private double price;
+
+    public BasicHobby() {
+    }
 
     public BasicHobby(String key, String activity, String type, int participants, double price) {
         this.key = key;
