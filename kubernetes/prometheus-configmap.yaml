@@ -19,7 +19,7 @@ data:
         metrics_path: '/metrics'
         scrape_interval: 3s
         static_configs:
-          - targets: [ 'activity:80']
+          - targets: [ 'activity:8080']
       - job_name: 'hobby'
         metrics_path: '/metrics'
         scrape_interval: 3s
