@@ -5,6 +5,9 @@ server:
 backend:
     url: http://activity:8080
 
+debug:
+  header: trace-debug-id
+
 tracing:
   enabled: true
   service: "hobby"

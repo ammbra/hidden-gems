@@ -14,12 +14,10 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Logger;
 
 public class FrontendService implements Service {
-    private final AtomicReference<String> backendService = new AtomicReference<>();
 
-    private static final Logger LOGGER = Logger.getLogger(FrontendService.class.getName());
+    String debugHeader;
 
     private static final String ID = "frontend-helidon-" + UUID.randomUUID()
             .toString().substring(0, 4);
@@ -30,6 +28,8 @@ public class FrontendService implements Service {
     private final WebClient webClient;
 
     FrontendService(Config config) {
+        debugHeader = config.get("debug.header").asString().orElse("trace-debug-id");
+        AtomicReference<String> backendService = new AtomicReference<>();
         backendService.set(config.get("backend.url").asString().orElse("http://localhost:8083"));
         webClient = WebClient.builder()
                 .baseUri(backendService.get())
@@ -48,13 +48,13 @@ public class FrontendService implements Service {
     }
 
     private void workWithHeaders(ServerRequest serverRequest, ServerResponse serverResponse) {
-        if (serverRequest.headers().value("trace-debug-id").isPresent()) {
-            String debugHeader = serverRequest.headers().value("trace-debug-id").get();
+        if (serverRequest.headers().value(debugHeader).isPresent()) {
+            String value = serverRequest.headers().value(debugHeader).get();
             Tracer tracer = serverRequest.tracer();
             SpanContext context = serverRequest.spanContext().get();
             Span.Builder spanBuilder = tracer.spanBuilder(context.traceId()).parent(context)
                     .kind(Span.Kind.SERVER)
-                    .tag(Tag.create("trace-debug-id", debugHeader));
+                    .tag(Tag.create(debugHeader, value));
             spanBuilder.start().end();
         }
         serverRequest.next();
@@ -76,7 +76,7 @@ public class FrontendService implements Service {
                              Request request) {
         final String requestId = ID + "/" + requestSequence.incrementAndGet();
 
-        RandomHobby hobby = null;
+        RandomHobby hobby;
         try {
             hobby = webClient.get()
                     .path("activity")
