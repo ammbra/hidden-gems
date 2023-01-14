@@ -42,7 +42,7 @@ services:
   # activity:
   #    networks:
   #      - backend
-  #    image: ammbra/activity:2.0.6-native
+  #    image: ammbra/activity:2.0.6
   #    ports:
   #      - "8082:8080"
   #    command: ["-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8082"]
