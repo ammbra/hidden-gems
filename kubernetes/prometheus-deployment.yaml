@@ -3,9 +3,6 @@ apiVersion: apps/v1
 metadata:
   annotations:
     deployment.kubernetes.io/revision: '4'
-    image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name":"prometheus:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"prometheus\")].image"}]
-    openshift.io/generated-by: OpenShiftNewApp
   name: prometheus
   labels:
     app: prometheus
@@ -18,11 +15,8 @@ spec:
       deployment: prometheus
   template:
     metadata:
-      creationTimestamp: null
       labels:
         deployment: prometheus
-      annotations:
-        openshift.io/generated-by: OpenShiftNewApp
     spec:
       volumes:
         - name: prometheus-volume-1
@@ -38,19 +32,15 @@ spec:
           ports:
             - containerPort: 9090
               protocol: TCP
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           volumeMounts:
             - name: prometheus-volume-1
               mountPath: /prometheus
-            - mountPath: /etc/prometheus
+            - mountPath: /etc/config
               name: prometheus-config-volume
           terminationMessagePolicy: File
-          image: >-
-            quay.io/prometheus/prometheus@sha256:cb42332b66ac51a05c52f255e48a4496c0a172676093123bf28b37762009e78a
+          image: prom/prometheus:v2.41.0
           args:
-            - '--config.file=/etc/prometheus/prometheus.yml'
+            - '--config.file=/etc/config/prometheus.yml'
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
-      dnsPolicy: ClusterFirst
-      securityContext: {}
-      schedulerName: default-scheduler

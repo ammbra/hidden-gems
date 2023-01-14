@@ -35,20 +35,16 @@ public class RandomHobbyResource {
     @Inject
     ActivityService service;
 
-
     public RandomHobbyResource() {
-        ID = "worker-quarkus-" + UUID.randomUUID()
+        ID = "worker-activity-" + UUID.randomUUID()
                 .toString().substring(0, 4);
     }
-
-
     @GET
     public Response getRandomHobby() throws InterruptedException {
         RandomHobby hobby = service.getActivity();
         hobby.setCloudId(cloudId);
         hobby.setWorkerId(ID);
         return (hobby.getPrice() < 0.1) ? timeout("busywork") : Response.status(Response.Status.OK).entity(hobby).build();
-
     }
 
     @GET
@@ -91,8 +87,6 @@ public class RandomHobbyResource {
             response = Response.status(Response.Status.GATEWAY_TIMEOUT)
                     .entity(service.getActivityByType(type)).build();
         } catch (Exception t) {
-            span.setAttribute("alarm", "unexpected");
-            span.setStatus(StatusCode.ERROR, "Something wrong happened!");
             span.recordException(t);
             response = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .build();

@@ -3,13 +3,21 @@ services:
   jaeger:
     networks:
       - backend
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one
     volumes:
       - "./jaeger-ui.json:/etc/jaeger/jaeger-ui.json"
       - "./sampling_strategies.json:/etc/jaeger/sampling_strategies.json"
-    command: --query.ui-config /etc/jaeger/jaeger-ui.json --log-level debug --metrics-backend prometheus --metrics-http-route /metrics
+    command:
+      - "--query.base-path"
+      - "/jaeger/ui"
+      - "--memory.max-traces"
+      - "10000"
+      - "--prometheus.server-url"
+      - "http://prometheus:9090"
+#    command: --query.ui-config /etc/jaeger/jaeger-ui.json --log-level debug --metrics-backend prometheus --metrics-http-route /metrics
     environment:
       - SAMPLING_STRATEGIES_FILE=/etc/jaeger/sampling_strategies.json
+      - COLLECTOR_OTLP_ENABLED=true
       - METRICS_STORAGE_TYPE=prometheus
       - PROMETHEUS_SERVER_URL=http://prometheus:9090
     ports:
@@ -19,7 +27,9 @@ services:
       - "6831:6831/udp"
       - "6832:6832/udp"
       - "16686:16686"
+      - "16685:16685"
       - "5778:5778"
+      - "4317:4317"
   otel_collector:
     networks:
       - backend
@@ -32,7 +42,7 @@ services:
   # activity:
   #    networks:
   #      - backend
-  #    image: quay.io/anasandbox/activity:2.0.6-native
+  #    image: ammbra/activity:2.0.6-native
   #    ports:
   #      - "8082:8080"
   #    command: ["-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8082"]
@@ -42,7 +52,7 @@ services:
   # hobby:
   #    networks:
   #      - backend
-  #    image: quay.io/anasandbox/hobby-frontend:2.0.6-native
+  #    image: ammbra/hobby:2.0.6
   #    ports:
   #      - "8080:8080"
   #    command: [ "-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8080",

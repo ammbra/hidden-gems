@@ -16,13 +16,16 @@ public non-sealed class RandomHobby extends BasicHobby {
         super();
     }
 
-    private RandomHobby(String key, String activity, String type, int participants, double price) {
+    private RandomHobby(String key, String activity, String type, int participants, double price, String cloudId, String workerId, boolean precious) {
         super(key, activity, type, participants, price);
+        this.cloudId = cloudId;
+        this.workerId = workerId;
+        this.precious = precious;
     }
 
     @JsonbCreator
     public static RandomHobby empty(String key, String activity, String type, int participants, double price) {
-        return new RandomHobby(key, activity, type, participants, price);
+        return new RandomHobby(key, activity, type, participants, price, null, null, false);
     }
     public String getCloudId() {
         return cloudId;

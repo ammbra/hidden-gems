@@ -2,62 +2,64 @@ package org.acme.entertainment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public sealed class BasicHobby permits RandomHobby {
 
-    private String key;
-    private String activity;
-    private String type;
-    private int participants;
-    private double price;
+	private String key;
+	private String activity;
+	private String type;
+	private int participants;
 
-    public BasicHobby(String key, String activity, String type, int participants, double price) {
-        this.key = key;
-        this.activity = activity;
-        this.type = type;
-        this.participants = participants;
-        this.price = price;
-    }
+	private double price;
 
-    public String getKey() {
-        return key;
-    }
+	public BasicHobby() {
+	}
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+	public BasicHobby(String key, String activity, String type, int participants, double price) {
+		this.key = key;
+		this.activity = activity;
+		this.type = type;
+		this.participants = participants;
+		this.price = price;
+	}
 
-    public String getActivity() {
-        return activity;
-    }
+	public String getKey() {
+		return key;
+	}
 
-    public void setActivity(String activity) {
-        this.activity = activity;
-    }
+	public void setKey(String key) {
+		this.key = key;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getActivity() {
+		return activity;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setActivity(String activity) {
+		this.activity = activity;
+	}
 
-    public int getParticipants() {
-        return participants;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setParticipants(int participants) {
-        this.participants = participants;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public double getPrice() {
-        return price;
-    }
+	public int getParticipants() {
+		return participants;
+	}
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+	public void setParticipants(int participants) {
+		this.participants = participants;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
 }

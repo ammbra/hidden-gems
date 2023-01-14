@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     io.kompose.service: jaeger
   name: jaeger
@@ -14,7 +13,6 @@ spec:
     type: Recreate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         io.kompose.service: jaeger
     spec:
@@ -35,7 +33,13 @@ spec:
               value: prometheus
             - name: PROMETHEUS_SERVER_URL
               value: http://prometheus:9090
-          image: quay.io/jaegertracing/all-in-one:latest
+            - name: SPAN_STORAGE_TYPE
+              value: memory
+            - name: JAEGER_DISABLED
+              value: "false"
+            - name: COLLECTOR_OTLP_ENABLED
+              value: "true"
+          image: jaegertracing/all-in-one:1.37.0
           name: jaeger
           ports:
             - containerPort: 5775
@@ -58,4 +62,3 @@ spec:
           configMap:
             defaultMode: 420
             name: jaeger-server-conf
-status: {}

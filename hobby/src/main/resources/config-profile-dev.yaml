@@ -1,0 +1,4 @@
+sources:
+  - type: "classpath"
+    properties:
+      resource: "application-dev.yaml"
