@@ -64,8 +64,6 @@ If you would like to use the extra attribute for debugging, you can try the foll
 ```
 curl -H 'trace-debug-id:local' http://localhost:8080/activity/type/busywork
 ```
-curl -H 'trace-debug-id:local' http://129.146.145.90:8080/activity/type/busywork
-
 
 
 == Rate of requests for a specific status in the 5 minutes
