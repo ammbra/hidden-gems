@@ -19,7 +19,7 @@ public class FrontendService implements Service {
 
     String debugHeader;
 
-    private static final String ID = "frontend-helidon-" + UUID.randomUUID()
+    private static final String ID = "frontend-hobby-" + UUID.randomUUID()
             .toString().substring(0, 4);
 
     private final AtomicInteger requestSequence = new AtomicInteger(0);
@@ -36,7 +36,6 @@ public class FrontendService implements Service {
                 .addReader(JacksonSupport.reader())
                 .addWriter(JacksonSupport.writer())
                 .build();
-
     }
 
 
@@ -77,6 +76,8 @@ public class FrontendService implements Service {
         final String requestId = ID + "/" + requestSequence.incrementAndGet();
 
         RandomHobby hobby;
+        System.out.println(webClient.get().path("activity").toString());
+
         try {
             hobby = webClient.get()
                     .path("activity")
@@ -84,6 +85,16 @@ public class FrontendService implements Service {
                     .request(RandomHobby.class).get();
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
+        }
+
+        var text = hobby.getActivity();
+
+        if (request.isUppercase()) {
+            hobby.setActivity(text.toUpperCase());
+        }
+
+        if (request.isReverse()) {
+           hobby.setActivity(new StringBuilder(text).reverse().toString());
         }
 
         this.data.addRequestId(requestId);

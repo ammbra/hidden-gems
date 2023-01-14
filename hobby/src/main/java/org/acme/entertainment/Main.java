@@ -49,8 +49,6 @@ public final class Main {
         // By default this will pick up application-dev.yaml from the classpath
         Config config = Config.create();
 
-        System.out.println(config.asString().toString());
-
         WebServer server = WebServer.builder(createRouting(config))
                 .config(config.get("host"))
                 .port(config.get("server.port").asInt().get())
@@ -66,7 +64,7 @@ public final class Main {
         // Try to start the server. If successful, print some info and arrange to
         // print a message at shutdown. If unsuccessful, print the exception.
         webserver.thenAccept(ws -> {
-            System.out.println("WEB server is up! http://localhost" + ws.port() );
+            System.out.println("WEB server is up! http://localhost:" + ws.port() );
             ws.whenShutdown().thenRun(() -> System.out.println("WEB server is DOWN. Good bye!"));
         })
         .exceptionallyAccept(t -> {

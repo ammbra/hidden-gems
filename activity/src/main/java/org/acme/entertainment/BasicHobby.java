@@ -1,11 +1,8 @@
 package org.acme.entertainment;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.json.bind.annotation.JsonbCreator;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public sealed class BasicHobby permits AccessibleHobby, RandomHobby {
 

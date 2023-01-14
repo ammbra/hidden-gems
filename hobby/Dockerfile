@@ -1,4 +1,3 @@
-
 # 1st stage, build the app
 FROM maven:3.8.4-openjdk-17-slim as build
 
@@ -13,7 +12,7 @@ RUN mvn package -Dmaven.test.skip -Declipselink.weave.skip -Dconfig.profile=prod
 # Do the Maven build!
 # Incremental docker builds will resume here when you change sources
 ADD src src
-RUN mvn package -DskipTests -Dconfig.profile=prod
+RUN mvn package -DskipTests
 
 RUN echo "done!"
 
@@ -25,6 +24,6 @@ WORKDIR /helidon
 COPY --from=build /helidon/target/hobby.jar ./
 COPY --from=build /helidon/target/libs ./libs
 
-CMD ["java", "-jar", "hobby.jar"]
+CMD ["java", "-jar", "-Dconfig.profile=prod", "hobby.jar"]
 
 EXPOSE 8080
