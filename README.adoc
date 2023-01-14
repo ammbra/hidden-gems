@@ -56,7 +56,7 @@ service:
 
 Also, use `quarkus.opentelemetry.tracer.sampler=on` in Quarkus configuration.
 
-curl -X 'POST' 'http://144.24.30.244:80/api/send-request' -H 'trace-debug-id:local' -H 'accept: */*' -H 'Content-Type: application/json' -d '{"uppercase": true,"reverse": true}'
+curl -X 'POST' 'http://activity:80/api/send-request' -H 'trace-debug-id:local' -H 'accept: */*' -H 'Content-Type: application/json' -d '{"uppercase": true,"reverse": true}'
 == Using the trace-debug-id header
 
 If you would like to use the extra attribute for debugging, you can try the following command:
@@ -84,4 +84,3 @@ hey -n 20 -c 10 http://localhost:8080/activity/5881028
 ```
 sum(delta(cache_gets_total{result="hit",cache="activity"}[1m]))/sum(delta(cache_gets_total{cache="activity"}[1m])) 
 ```
-hey -n 20 -c 10 http://129.146.145.90:8080/activity/5881028
