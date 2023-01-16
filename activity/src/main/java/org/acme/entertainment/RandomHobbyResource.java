@@ -1,5 +1,6 @@
 package org.acme.entertainment;
 
+import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.StatusCode;
 import io.opentelemetry.api.trace.Tracer;
@@ -87,7 +88,8 @@ public class RandomHobbyResource {
             response = Response.status(Response.Status.GATEWAY_TIMEOUT)
                     .entity(service.getActivityByType(type)).build();
         } catch (Exception t) {
-            span.recordException(t);
+            var attributes = Attributes.builder().put("alarm", "unexpected").build();
+            span.recordException(t, attributes);
             response = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .build();
         } finally {
