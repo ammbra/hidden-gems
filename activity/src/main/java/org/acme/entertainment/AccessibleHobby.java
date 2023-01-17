@@ -7,7 +7,7 @@ import javax.json.bind.annotation.JsonbCreator;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public non-sealed class AccessibleHobby extends BasicHobby {
+public final class AccessibleHobby extends BasicHobby {
     private String link;
     private double accessibility;
 

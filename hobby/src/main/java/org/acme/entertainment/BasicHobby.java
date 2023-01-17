@@ -8,19 +8,14 @@ public sealed class BasicHobby permits RandomHobby {
 	private String key;
 	private String activity;
 	private String type;
-	private int participants;
-
-	private double price;
 
 	public BasicHobby() {
 	}
 
-	public BasicHobby(String key, String activity, String type, int participants, double price) {
+	public BasicHobby(String key, String activity, String type) {
 		this.key = key;
 		this.activity = activity;
 		this.type = type;
-		this.participants = participants;
-		this.price = price;
 	}
 
 	public String getKey() {
@@ -47,19 +42,4 @@ public sealed class BasicHobby permits RandomHobby {
 		this.type = type;
 	}
 
-	public int getParticipants() {
-		return participants;
-	}
-
-	public void setParticipants(int participants) {
-		this.participants = participants;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
 }

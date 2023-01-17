@@ -14,8 +14,8 @@ public non-sealed class RandomHobby extends BasicHobby {
         super();
     }
 
-    public RandomHobby(String key, String activity, String type, int participants, double price) {
-        super(key, activity, type, participants, price);
+    public RandomHobby(String key, String activity, String type) {
+        super(key, activity, type);
     }
 
     public String getCloudId() {
