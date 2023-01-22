@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
+    prometheus.io/port: "8080"
+    prometheus.io/scheme: http
+  labels:
+    app.kubernetes.io/version: 2.0.6
+    app.kubernetes.io/name: activity
+  name: activity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/version: 2.0.6
+      app.kubernetes.io/name: activity
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+        prometheus.io/scheme: http
+      labels:
+        app.kubernetes.io/version: 2.0.6
+        app.kubernetes.io/name: activity
+    spec:
+      containers:
+        - args:
+          - -Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: WORKER_CLOUD_ID
+              value: "oci"
+          image: ammbra/activity:2.0.6-zgc
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: activity
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10

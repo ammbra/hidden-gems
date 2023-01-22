@@ -24,6 +24,8 @@ WORKDIR /helidon
 COPY --from=build /helidon/target/hobby.jar ./
 COPY --from=build /helidon/target/libs ./libs
 
+ENV JDK_JAVA_OPTIONS "-XX:+UnlockExperimentalVMOptions -XX:+UseZGC"
+
 CMD ["java", "-jar", "-Dconfig.profile=prod", "hobby.jar"]
 
 EXPOSE 8080
