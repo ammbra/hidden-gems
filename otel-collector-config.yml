@@ -22,29 +22,36 @@ exporters:
       insecure: true
 
 processors:
-#  tail_sampling:
-#    decision_wait: 10s
-#    num_traces: 100
-#    expected_new_traces_per_sec: 10
-#    policies:
-#      [
-#        {
-#          name: latency-policy,
-#          type: latency,
-#          latency: { threshold_ms: 5000 }
-#        },
-#        {
-#          name: status-code-policy,
-#          type: status_code,
-#          status_code: { status_codes: [ ERROR, OK ] }
-#        },
-#        {
-#          name: string-policy,
-#          type: string_attribute,
-#          string_attribute: { key: alarm, values: [ unexpected ] }
-#        }
-#      ]
-  batch:
+  tail_sampling:
+    decision_wait: 10s
+    num_traces: 100
+    expected_new_traces_per_sec: 10
+    policies:
+      [
+        {
+          name: latency-policy,
+          type: latency,
+          latency: { threshold_ms: 5000 }
+        },
+        {
+          name: status-code-policy,
+          type: status_code,
+          status_code: { status_codes: [ ERROR, OK ] }
+        },
+        {
+          name: string-policy,
+          type: string_attribute,
+          string_attribute: { key: alarm, values: [ unexpected ] }
+        }
+      ]
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 50
+    spike_limit_percentage: 30
+#  batch:
+#    timeout: 10s
+#    send_batch_size: 10000
+#    send_batch_max_size: 11000
   spanmetrics:
     metrics_exporter: prometheus
 
@@ -52,8 +59,8 @@ service:
   pipelines:
     traces:
       receivers: [jaeger]
-      processors: [spanmetrics, batch]
-#      processors: [spanmetrics, tail_sampling]
+#      processors: [spanmetrics, batch]
+      processors: [spanmetrics, tail_sampling, memory_limiter]
       exporters: [jaeger]
     # The exporter name in this pipeline must match the spanmetrics.metrics_exporter name.
     # The receiver is just a dummy and never used; added to pass validation requiring at least one receiver in a pipeline.
