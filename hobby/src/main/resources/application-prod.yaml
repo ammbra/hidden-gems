@@ -8,6 +8,13 @@ backend:
 debug:
   header: trace-debug-id
 
+metrics:
+  registries:
+    - type: application
+  key-performance-indicators:
+    extended: true
+    long-running:
+      threshold-ms: 2000
 tracing:
   enabled: true
   service: "hobby"

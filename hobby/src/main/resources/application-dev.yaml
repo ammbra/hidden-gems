@@ -7,7 +7,13 @@ backend:
 
 debug:
   header: trace-debug-id
-
+metrics:
+  registries:
+    - type: application
+  key-performance-indicators:
+    extended: true
+    long-running:
+      threshold-ms: 2000
 tracing:
   enabled: true
   service: "hobby"
@@ -24,5 +30,6 @@ tracing:
   log-spans: true      # JAEGER_REPORTER_LOG_SPANS
   max-queue-size: 42    # JAEGER_REPORTER_MAX_QUEUE_SIZE
   flush-interval-ms: 10001 # JAEGER_REPORTER_FLUSH_INTERVAL
+
 
 

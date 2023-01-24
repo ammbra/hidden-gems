@@ -57,6 +57,14 @@ service:
 Also, use `quarkus.opentelemetry.tracer.sampler=on` in Quarkus configuration.
 
 curl -X 'POST' 'http://activity:80/api/send-request' -H 'trace-debug-id:local' -H 'accept: */*' -H 'Content-Type: application/json' -d '{"uppercase": true,"reverse": true}'
+
+== Rate of requests for a specific status in the 5 minutes
+
+```
+rate(application_http_requests_seconds_sum{job="hobby", method="POST"}[5m])
+rate(http_server_requests_seconds_sum{job="activity",  method="GET", status="504"}[5m])
+```
+
 == Using the trace-debug-id header
 
 If you would like to use the extra attribute for debugging, you can try the following command:
@@ -65,13 +73,6 @@ If you would like to use the extra attribute for debugging, you can try the foll
 curl -H 'trace-debug-id:local' http://localhost:8080/activity/type/busywork
 ```
 
-
-== Rate of requests for a specific status in the 5 minutes
-
-```
-rate(http_server_requests_seconds_sum{job="hobby", method="POST"}[5m])
-rate(http_server_requests_seconds_sum{job="activity",  method="GET", status="504"}[5m])
-```
 
 === Query for a cache hit rate graph with Prometheus
 
