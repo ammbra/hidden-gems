@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.helidon.applications</groupId>
-        <artifactId>helidon-mp</artifactId>
+        <artifactId>helidon-se</artifactId>
         <version>3.1.0</version>
         <relativePath/>
     </parent>
