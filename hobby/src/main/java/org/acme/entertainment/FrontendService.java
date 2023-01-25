@@ -9,6 +9,7 @@ import io.helidon.tracing.SpanContext;
 import io.helidon.tracing.Tag;
 import io.helidon.tracing.Tracer;
 import io.helidon.webclient.WebClient;
+import io.helidon.webclient.tracing.WebClientTracing;
 import io.helidon.webserver.*;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.Timer;
@@ -41,6 +42,7 @@ public class FrontendService implements Service {
 		requestTimer = appRegistry.timer("http_requests");
 
 		webClient = WebClient.builder()
+				.addService(WebClientTracing.create())
 				.baseUri(backendService.get())
 				.addReader(JacksonSupport.reader())
 				.addWriter(JacksonSupport.writer())

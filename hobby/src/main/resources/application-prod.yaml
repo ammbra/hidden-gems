@@ -2,6 +2,23 @@ server:
   port: 8080
   host: 0.0.0.0
 
+client:
+  connect-timeout-millis: 2000
+  read-timeout-millis: 2000
+  follow-redirects: true
+  max-redirects: 5
+  services:
+    config:
+      metrics:
+        - type: METER
+          name-format: "client.meter.overall"
+        - type: TIMER
+          # meter per method
+          name-format: "client.meter.%1$s"
+        - methods: ["GET", "PUT", "POST", "DELETE"]
+          type: COUNTER
+          name-format: "client.counter.%1$s.%2$s"
+
 backend:
     url: http://activity:8080
 

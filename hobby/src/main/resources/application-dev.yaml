@@ -2,6 +2,17 @@ server:
   port: 8080
   host: 0.0.0.0
 
+client:
+  connect-timeout-millis: 2000
+  read-timeout-millis: 2000
+  follow-redirects: true
+  max-redirects: 5
+  services:
+    config:
+      metrics:
+        - methods: ["GET", "PUT", "POST", "DELETE"]
+          type: COUNTER
+          name-format: "client.counter.%1$s.%2$s"
 backend:
     url: http://localhost:8082
 
