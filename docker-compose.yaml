@@ -53,6 +53,8 @@ services:
       networks:
         - backend
       image: ammbra/hobby:2.0.6
+      command: [ "-Dquarkus.opentelemetry.tracer.exporter.jaeger.endpoint=http://jaeger:14250/api/traces", "-Dquarkus.http.port=8080",
+                 "-Dorg.acme.entertainment.BackendService/mp-rest/url=http://activity:8080" ]
       ports:
         - "8080:8080"
       depends_on:
