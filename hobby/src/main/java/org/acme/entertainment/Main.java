@@ -11,11 +11,17 @@ import io.helidon.common.LogConfig;
 import io.helidon.common.reactive.Single;
 import io.helidon.config.Config;
 import io.helidon.tracing.TracerBuilder;
+import io.helidon.tracing.jaeger.JaegerTracerBuilder;
+import io.helidon.tracing.opentelemetry.HelidonOpenTelemetry;
+import io.helidon.tracing.opentelemetry.OpenTelemetryTracerProvider;
+import io.opentelemetry.api.OpenTelemetry;
 import io.helidon.webserver.Routing;
-import io.helidon.webserver.ServerConfiguration;
-import io.helidon.webserver.Service;
+//import io.helidon.webserver.ServerConfiguration;
+//import io.helidon.webserver.Service;
 import io.helidon.webserver.WebServer;
 import io.helidon.webserver.staticcontent.StaticContentSupport;
+
+import static io.helidon.tracing.opentelemetry.OpenTelemetryTracerProvider.*;
 
 
 /**
@@ -52,11 +58,8 @@ public final class Main {
         WebServer server = WebServer.builder(createRouting(config))
                 .config(config.get("host"))
                 .port(config.get("server.port").asInt().get())
-                .tracer(TracerBuilder.create(config.get("tracing"))
-                        .serviceName("hobby")
-                        .registerGlobal(true)
-                        .build())
                 .addMediaSupport(JsonbSupport.create())
+                .tracer(TracerBuilder.create(config.get("tracing")).serviceName("hobby").build())
                 .build();
 
         Single<WebServer> webserver = server.start();

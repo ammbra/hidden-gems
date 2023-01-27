@@ -14,6 +14,7 @@ import io.helidon.webserver.*;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.Timer;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -89,10 +90,11 @@ public class FrontendService implements Service {
 		final String requestId = ID + "/" + requestSequence.incrementAndGet();
 
         final RandomHobby[] hobby = new RandomHobby[1];
+
 		requestTimer.time(() -> {
 			try {
 				hobby[0] = webClient.get()
-						.path("activity")
+						 .path("activity")
 						.contentType(MediaType.APPLICATION_JSON)
 						.request(RandomHobby.class).get();
 			} catch (InterruptedException | ExecutionException e) {
